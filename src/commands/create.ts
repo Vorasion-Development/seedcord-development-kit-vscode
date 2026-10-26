@@ -180,7 +180,7 @@ export default () =>
       ...(token ? ['--token', token] : ['--no-token']),
       `--testing-guilds=${testingServerIds.join(',')}`,
       '--color',
-      botColor.label,
+      botColor.value.includes('#') ? `'${botColor.value}'` : botColor.label, // Label because the scaffolder expects a named color, not a numerical value.
       '--install',
       ...(initializeGit ? ['--git'] : ['--no-git']),
     ]
@@ -191,7 +191,7 @@ export default () =>
     terminal.sendText(`${packageManager} ${args.join(' ')} && exit`)
 
     onDidCloseTerminal(async (term) => {
-      if (term.name !== terminalName) return
+      if (term !== terminal.terminal) return
 
       if (term.exitStatus?.code === 0) {
         window.showInformationMessage('Project created successfully.')
