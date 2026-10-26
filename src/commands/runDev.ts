@@ -1,6 +1,7 @@
-import { useCommand } from "reactive-vscode"
-import { window } from "vscode"
-import { logger } from "../utils"
+import { useCommand } from 'reactive-vscode'
+import { window } from 'vscode'
+
+import { logger } from '../utils'
 
 export default (seedcordAvailable: boolean) =>
   useCommand('seedcord.runDev', () => {

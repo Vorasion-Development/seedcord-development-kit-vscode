@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   deps: {
     onlyBundle: false,
-    neverBundle: ['vscode']
+    neverBundle: ['vscode'],
   },
   entry: ['src/extension.ts'],
   format: ['cjs'],
