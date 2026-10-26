@@ -1,3 +1,4 @@
+bun format --check
 bun format
 bun check
 
