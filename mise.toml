@@ -1,0 +1,15 @@
+[tools]
+node = "22"
+"npm:@antfu/ni" = "30"
+pnpm = "12"
+
+[hooks]
+enter = "ni"
+
+[tasks.build]
+alias = "b"
+run = "nr build"
+
+[tasks.dev]
+alias = "d"
+run = "nr dev"

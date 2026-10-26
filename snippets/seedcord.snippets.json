@@ -11,7 +11,8 @@
       "        super('command')",
       "        this.instance.setName('$3').setDescription('$4')",
       "    }",
-      "}"
+      "}",
+      ""
     ],
     "include": ["**/*.ts"],
     "exclude": ["**/node_modules/**", "**/dist/**", "**/*.d.ts", "**/*.test.ts", "**/*.spec.ts"],
@@ -28,7 +29,8 @@
       "    public override async execute(): Promise<void> {",
       "        await this.reply('Hello from $2Route!')",
       "    }",
-      "}"
+      "}",
+      ""
     ],
     "include": ["**/*.ts"],
     "exclude": ["**/node_modules/**", "**/dist/**", "**/*.d.ts", "**/*.test.ts", "**/*.spec.ts"],
@@ -43,11 +45,12 @@
       "",
       "@RegisterEvent([Events.$1])",
       "export class $2 extends EventHandler<Events.$1> {",
-      "    public async execute(): Promise<void> {",
+      "    public override async execute(): Promise<void> {",
       "        const [event] = this.event",
       "        // do something here!",
       "    }",
-      "}"
+      "}",
+      ""
     ],
     "include": ["**/*.ts"],
     "exclude": ["**/node_modules/**", "**/dist/**", "**/*.d.ts", "**/*.test.ts", "**/*.spec.ts"],
@@ -63,11 +66,12 @@
       "@Gated($2)",
       "@RegisterEvent([Events.$1])",
       "export class $3 extends EventHandler<Events.$1> {",
-      "    public async execute(): Promise<void> {",
+      "    public override async execute(): Promise<void> {",
       "        const [event] = this.event",
       "        // do something here!",
       "    }",
-      "}"
+      "}",
+      ""
     ],
     "include": ["**/*.ts"],
     "exclude": ["**/node_modules/**", "**/dist/**", "**/*.d.ts", "**/*.test.ts", "**/*.spec.ts"],

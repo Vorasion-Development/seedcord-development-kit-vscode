@@ -8,3 +8,10 @@ src/**
 **/*.map
 **/*.ts
 **/.vscode-test.*
+.agents/
+.husky/
+.czrc
+commitlint.config.ts
+taze.config.js
+oxfmt.config.ts
+oxlint.config.ts
