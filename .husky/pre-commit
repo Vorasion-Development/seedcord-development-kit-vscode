@@ -1,6 +1,9 @@
+# Run our checks
 bun format --check
-bun format
 bun check
+
+# Add all changes to git before committing, in case any files were modified by the format command.
+git add .
 
 # Formatting lmao.
 echo
