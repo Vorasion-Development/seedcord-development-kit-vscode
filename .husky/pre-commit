@@ -3,7 +3,7 @@ bun format --check
 bun check
 
 # Add all changes to git before committing, in case any files were modified by the format command.
-git add .
+git update-index --again
 
 # Formatting lmao.
 echo
