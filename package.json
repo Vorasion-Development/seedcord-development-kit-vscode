@@ -60,8 +60,8 @@
       "properties": {
         "seedcord.stopBeingAnnoying": {
           "type": "boolean",
-          "default": true,
-          "description": "Whether or not to show a message once when the extension starts if it doesn't find seedcord in the current workspace"
+          "default": false,
+          "description": "Whether to suppress the one-time message shown at startup when seedcord is not found in the current workspace"
         }
       }
     },
