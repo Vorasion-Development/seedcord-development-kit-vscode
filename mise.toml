@@ -1,5 +1,4 @@
 [tools]
-"github:detekt/detekt" = "1.23"
 java = "temurin-25.0.5+8.0.LTS"
 ktlint = "1.8"
 node = "22"
