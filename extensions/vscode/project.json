@@ -25,7 +25,7 @@
         },
         "resync": {
             "cache": true,
-            "command": "pnpm install && pnpm build"
+            "command": "pnpm install && pnpm nx run VSCode:build"
         }
     }
 }

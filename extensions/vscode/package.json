@@ -1,5 +1,5 @@
 {
-  "name": "@seedcord/seedcord-development-kit",
+  "name": "seedcord-development-kit",
   "displayName": "Seedcord Development Kit",
   "version": "0.0.1",
   "private": true,
