@@ -1,17 +1,9 @@
 .vscode/**
 .vscode-test/**
 src/**
-.gitignore
 .yarnrc
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
 **/.vscode-test.*
-.agents/
-.husky/
-.czrc
-commitlint.config.ts
-taze.config.js
-oxfmt.config.ts
-oxlint.config.ts
