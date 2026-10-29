@@ -1,9 +1,9 @@
 import { resolve } from 'node:path'
 
 import { Colors } from 'discord.js'
-import { useCommand, useEvent, useTerminal } from 'reactive-vscode'
+import { useCommand, useTerminal } from 'reactive-vscode'
 import validate from 'validate-npm-package-name'
-import { commands, Uri, window } from 'vscode'
+import { commands, type Terminal, Uri, window } from 'vscode'
 
 type ProjectRunner = 'server' | 'edge'
 type ProjectType = 'HTTP' | 'Gateway'
@@ -44,8 +44,6 @@ const parseTestingServerIds = (value: string | undefined) =>
     .split(',')
     .map((id) => id.trim())
     .filter((id) => id.length > 0)
-
-const onDidCloseTerminal = useEvent(window.onDidCloseTerminal)
 
 export default () =>
   useCommand('seedcord.createProject', async () => {
@@ -205,23 +203,42 @@ export default () =>
       ...(token ? ['--token', token] : ['--no-token']),
       `--testing-guilds=${testingServerIds.join(',')}`,
       '--color',
-      botColor.value.includes('#') ? `"${botColor.value}"` : botColor.label, // Label because the scaffolder expects a named color, not a numerical value.
+      botColor.value, // Named colors use their name; custom colors use the validated hex value.
       '--install',
       ...(initializeGit ? ['--git'] : ['--no-git']),
     ]
 
     const terminalName = 'Seedcord Project Creation'
-    const terminal = useTerminal({ cwd: rootFolder, name: terminalName })
-    terminal.show(true)
-    terminal.sendText(`${packageManager} "${args.join('" "')}" && exit`)
 
-    onDidCloseTerminal(async (term) => {
-      if (term !== terminal.terminal) return
+    let terminal: Terminal | undefined
+    const closeListener = window.onDidCloseTerminal(async (closedTerminal) => {
+      if (closedTerminal !== terminal) return
 
-      if (term.exitStatus?.code === 0) {
-        window.showInformationMessage('Project created successfully.')
-        if (openWorkspaceImmediately)
-          await commands.executeCommand('vscode.openFolder', Uri.file(resolve(rootFolder, name)))
-      } else window.showErrorMessage(`Project creation failed with code ${term.exitStatus?.code ?? 'unknown'}`)
+      closeListener.dispose()
+
+      const exitCode = closedTerminal.exitStatus?.code
+
+      // The terminal was closed manually, so the scaffolder did not finish.
+      if (exitCode === undefined) return
+
+      if (exitCode !== 0) {
+        window.showErrorMessage(`Project creation failed with exit code ${exitCode}.`)
+        return
+      }
+
+      window.showInformationMessage('Project created successfully.')
+
+      if (openWorkspaceImmediately)
+        await commands.executeCommand('vscode.openFolder', Uri.file(resolve(rootFolder, name)))
     })
+
+    terminal = useTerminal({
+      cwd: rootFolder,
+      name: terminalName,
+      // Run the package manager directly rather than through a shell so the terminal exits with the
+      // command's status on success and failure without needing an explicit `exit` command.
+      shellPath: packageManager,
+      shellArgs: args,
+    }).terminal
+    terminal.show(true)
   })
