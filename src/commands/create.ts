@@ -1,9 +1,9 @@
 import { resolve } from 'node:path'
 
 import { Colors } from 'discord.js'
-import { useCommand, useEvent, useTerminal } from 'reactive-vscode'
+import { useCommand, useTerminal } from 'reactive-vscode'
 import validate from 'validate-npm-package-name'
-import { commands, Uri, window } from 'vscode'
+import { commands, type Terminal, Uri, window } from 'vscode'
 
 type ProjectRunner = 'server' | 'edge'
 type ProjectType = 'HTTP' | 'Gateway'
@@ -35,7 +35,15 @@ const askYesNo = async (prompt: string) => {
   return result === 'Yes'
 }
 
-const onDidCloseTerminal = useEvent(window.onDidCloseTerminal)
+const isValidTestingServerId = (id: string) => /^\d{17,20}$/.test(id)
+
+const isValidBotToken = (value: string) => /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(value)
+
+const parseTestingServerIds = (value: string | undefined) =>
+  (value ?? '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0)
 
 export default () =>
   useCommand('seedcord.createProject', async () => {
@@ -74,17 +82,16 @@ export default () =>
 
     let runnerOrIntents: ProjectRunner | { label: string; value: string }[] | undefined = undefined
 
-    if (httpOrGateway === 'HTTP')
-      runnerOrIntents =
-        (await window.showQuickPick(['Node', 'Cloudflare Workers'], {
-          placeHolder: 'Where does your bot run?',
-        })) === 'Node'
-          ? 'server'
-          : 'edge'
-    else if (httpOrGateway === 'Gateway')
+    if (httpOrGateway === 'HTTP') {
+      const selection = await window.showQuickPick(['Node', 'Cloudflare Workers'], {
+        placeHolder: 'Where does your bot run?',
+      })
+      if (!selection) return window.showWarningMessage('Runner selection is required, not creating the project.')
+      runnerOrIntents = selection === 'Node' ? 'server' : 'edge'
+    } else if (httpOrGateway === 'Gateway')
       runnerOrIntents = await window.showQuickPick(
         seedcordIntents.map(({ name, value, privileged }) => ({
-          label: privileged ? `${name} (privileged)` : name,
+          label: privileged ? `${name} (Privileged Intent)` : name,
           value,
         })),
         {
@@ -100,8 +107,15 @@ export default () =>
       await window.showInputBox({
         password: true,
         placeHolder: 'Enter your bot token or just press enter to move forward...',
+        validateInput(value) {
+          if (!value.trim() || isValidBotToken(value.trim())) return null
+          return 'Enter a valid Discord bot token, or leave this field empty to skip it'
+        },
       })
     )?.trim()
+
+    if (token && !isValidBotToken(token))
+      return window.showWarningMessage('The bot token you provided is not valid, not creating the project.', 'OK')
 
     if (!token || token.length === 0)
       window.showWarningMessage(
@@ -109,16 +123,25 @@ export default () =>
         'OK',
       )
 
-    const testingServerIds =
-      (
-        await window.showInputBox({
-          placeHolder:
-            'Enter the guild IDs where the commands should be registered or press enter to register globally...',
-        })
+    const testingServerIds = parseTestingServerIds(
+      await window.showInputBox({
+        placeHolder:
+          'Enter the guild IDs where the commands should be registered or press enter to register globally...',
+        validateInput(value) {
+          const invalidIds = parseTestingServerIds(value).filter((id) => !isValidTestingServerId(id))
+          if (invalidIds.length > 0)
+            return `Invalid Discord server ID(s): ${invalidIds.join(', ')}. IDs must be 17-20 digits, separated by commas.`
+          return null
+        },
+      }),
+    )
+
+    const invalidTestingServerIds = testingServerIds.filter((id) => !isValidTestingServerId(id))
+    if (invalidTestingServerIds.length > 0)
+      return window.showWarningMessage(
+        `Invalid Discord server ID(s): ${invalidTestingServerIds.join(', ')}. IDs must be 17-20 digits, not creating the project.`,
+        'OK',
       )
-        ?.trim()
-        ?.split(',')
-        .map((id) => id.trim()) ?? []
 
     if (testingServerIds.length === 0)
       window.showWarningMessage('No testing server IDs were provided, commands will be registered globally.', 'OK')
@@ -180,23 +203,42 @@ export default () =>
       ...(token ? ['--token', token] : ['--no-token']),
       `--testing-guilds=${testingServerIds.join(',')}`,
       '--color',
-      botColor.value.includes('#') ? `'${botColor.value}'` : botColor.label, // Label because the scaffolder expects a named color, not a numerical value.
+      botColor.value, // Named colors use their name; custom colors use the validated hex value.
       '--install',
       ...(initializeGit ? ['--git'] : ['--no-git']),
     ]
 
     const terminalName = 'Seedcord Project Creation'
-    const terminal = useTerminal({ cwd: rootFolder, name: terminalName })
-    terminal.show(true)
-    terminal.sendText(`${packageManager} ${args.join(' ')} && exit`)
 
-    onDidCloseTerminal(async (term) => {
-      if (term !== terminal.terminal) return
+    let terminal: Terminal | undefined
+    const closeListener = window.onDidCloseTerminal(async (closedTerminal) => {
+      if (closedTerminal !== terminal) return
 
-      if (term.exitStatus?.code === 0) {
-        window.showInformationMessage('Project created successfully.')
-        if (openWorkspaceImmediately)
-          await commands.executeCommand('vscode.openFolder', Uri.file(resolve(rootFolder, name)))
-      } else window.showErrorMessage(`Project creation failed with code ${term.exitStatus?.code ?? 'unknown'}`)
+      closeListener.dispose()
+
+      const exitCode = closedTerminal.exitStatus?.code
+
+      // The terminal was closed manually, so the scaffolder did not finish.
+      if (exitCode === undefined) return
+
+      if (exitCode !== 0) {
+        window.showErrorMessage(`Project creation failed with exit code ${exitCode}.`)
+        return
+      }
+
+      window.showInformationMessage('Project created successfully.')
+
+      if (openWorkspaceImmediately)
+        await commands.executeCommand('vscode.openFolder', Uri.file(resolve(rootFolder, name)))
     })
+
+    terminal = useTerminal({
+      cwd: rootFolder,
+      name: terminalName,
+      // Run the package manager directly rather than through a shell so the terminal exits with the
+      // command's status on success and failure without needing an explicit `exit` command.
+      shellPath: packageManager,
+      shellArgs: args,
+    }).terminal
+    terminal.show(true)
   })

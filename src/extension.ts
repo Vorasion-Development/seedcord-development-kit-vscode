@@ -5,6 +5,7 @@ import { window } from 'vscode'
 import commands from './commands'
 import { config } from './config'
 import { hasSeedcord, packageJsonCache } from './helpers'
+import { seedcordAvailable } from './state'
 import { logger } from './utils'
 
 let alreadyFoundSeedcord = false
@@ -14,12 +15,11 @@ const checkForSeedcord = async (showWarningMessage: boolean = true) => {
   if (alreadyFoundSeedcord) return
 
   const seedcordResult = await hasSeedcord()
+  seedcordAvailable.value = seedcordResult.found
 
   if (seedcordResult.found) {
     alreadyFoundSeedcord = true
     logger.info(`Found seedcord at: ${seedcordResult.path}`)
-
-    commands.needsSeedcordCommands.forEach((command) => command(alreadyFoundSeedcord))
 
     if (hasShownInitialPrompt) return
 
@@ -41,21 +41,23 @@ const checkForSeedcord = async (showWarningMessage: boolean = true) => {
     if (showWarningMessage && !config.stopBeingAnnoying)
       window.showWarningMessage('Could not find seedcord in the current workspace - did you forget to install it?')
 
-    commands.needsSeedcordCommands.forEach((command) => command(false))
     logger.warn('Could not find seedcord in the current workspace')
   }
 }
 
 export = defineExtension(async () => {
   commands.dontNeedSeedcordCommands.forEach((command) => command())
+  commands.needsSeedcordCommands.forEach((command) => command())
 
   await checkForSeedcord()
   const filesToWatch = computed(() => ['**/package.json'])
   const watcher = useFileSystemWatcher(filesToWatch)
-  watcher.onDidChange(async (uri) => {
+  watcher.onDidChange((uri) => {
     logger.debug(`Detected change in file: ${uri.fsPath}`)
     packageJsonCache.delete(uri.fsPath)
     alreadyFoundSeedcord = false
-    await checkForSeedcord(false)
+    void checkForSeedcord(false).catch((error: unknown) => {
+      logger.error('Failed to check for seedcord after a package.json change', error)
+    })
   })
 })
