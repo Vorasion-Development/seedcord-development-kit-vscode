@@ -1,4 +1,4 @@
-import { stripIndents } from 'common-tags'
+import dedent from 'dedent'
 import { computed, defineExtension, useFileSystemWatcher } from 'reactive-vscode'
 import { window } from 'vscode'
 
@@ -31,7 +31,7 @@ const checkForSeedcord = async (showWarningMessage: boolean = true) => {
     )
 
     if (!response || response === 'No') {
-      window.showInformationMessage(stripIndents`Okay! You can always start the
+      window.showInformationMessage(dedent`Okay! You can always start the
         bot later from the command palette.`)
       return
     }
@@ -52,10 +52,10 @@ export = defineExtension(async () => {
   await checkForSeedcord()
   const filesToWatch = computed(() => ['**/package.json'])
   const watcher = useFileSystemWatcher(filesToWatch)
-  watcher.onDidChange((uri) => {
+  watcher.onDidChange(async (uri) => {
     logger.debug(`Detected change in file: ${uri.fsPath}`)
     packageJsonCache.delete(uri.fsPath)
     alreadyFoundSeedcord = false
-    checkForSeedcord(false)
+    await checkForSeedcord(false)
   })
 })

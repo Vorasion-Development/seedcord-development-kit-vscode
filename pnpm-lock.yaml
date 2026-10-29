@@ -14,9 +14,9 @@ importers:
       '@sapphire/result':
         specifier: ^2.8.0
         version: 2.8.0
-      common-tags:
-        specifier: ^1.8.2
-        version: 1.8.2
+      dedent:
+        specifier: ^1.7.2
+        version: 1.7.2
       discord.js:
         specifier: ^14.27.0
         version: 14.27.0
@@ -39,9 +39,6 @@ importers:
       '@commitlint/types':
         specifier: ^21.2.3
         version: 21.2.3
-      '@types/common-tags':
-        specifier: ^1.8.4
-        version: 1.8.4
       '@types/node':
         specifier: 22.x
         version: 22.20.5
@@ -700,9 +697,6 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@types/common-tags@1.8.4':
-    resolution: {integrity: sha512-S+1hLDJPjWNDhcGxsxEbepzaxWqURP/o+3cP4aa2w7yBXgdcmKGQtZzP8JbyfOd0m+33nh+8+kvxYE2UJtBDkg==}
-
   '@types/node@22.20.5':
     resolution: {integrity: sha512-U2+DNr+wSjpsTS/wZGYHq7GcwfuSmKiKvoPvK22zwTlRhU91yOniN4qRR5KhIjvif7ysw/dz/hKmfDH0Ris4aA==}
 
@@ -921,10 +915,6 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  common-tags@1.8.2:
-    resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==}
-    engines: {node: '>=4.0.0'}
-
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
@@ -959,6 +949,14 @@ packages:
 
   dedent@0.7.0:
     resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
+
+  dedent@1.7.2:
+    resolution: {integrity: sha512-WzMx3mW98SN+zn3hgemf4OzdmyNhhhKz5Ay0pUfQiMQ3e1g+xmTJWp/pKdwKVXhdSkAEGIIzqeuWrL3mV/AXbA==}
+    peerDependencies:
+      babel-plugin-macros: ^3.1.0
+    peerDependenciesMeta:
+      babel-plugin-macros:
+        optional: true
 
   defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
@@ -2209,8 +2207,6 @@ snapshots:
       '@socketsecurity/socket-patch-win32-ia32': 2.0.0
       '@socketsecurity/socket-patch-win32-x64': 2.0.0
 
-  '@types/common-tags@1.8.4': {}
-
   '@types/node@22.20.5':
     dependencies:
       undici-types: 6.21.0
@@ -2398,8 +2394,6 @@ snapshots:
       - '@types/node'
       - typescript
 
-  common-tags@1.8.2: {}
-
   concat-map@0.0.1: {}
 
   conventional-changelog-angular@9.4.0:
@@ -2440,6 +2434,8 @@ snapshots:
       - typescript
 
   dedent@0.7.0: {}
+
+  dedent@1.7.2: {}
 
   defaults@1.0.4:
     dependencies:
