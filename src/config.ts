@@ -4,4 +4,4 @@ interface ExtensionConfig {
   stopBeingAnnoying: boolean
 }
 
-export const config = defineConfig<ExtensionConfig>('seedcord-development-kit')
+export const config = defineConfig<ExtensionConfig>('seedcord')

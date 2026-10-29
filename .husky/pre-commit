@@ -1,6 +1,8 @@
-bun format --check
-bun format
-bun check
+# Run our checks
+pnpm check
+
+# Add all changes to git before committing, in case any files were modified by the format command.
+git update-index --again
 
 # Formatting lmao.
 echo

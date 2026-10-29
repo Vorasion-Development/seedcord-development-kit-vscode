@@ -6,11 +6,12 @@
   "categories": [
     "Other"
   ],
-  "publisher": "lunaradev1",
+  "publisher": "vorasion-development",
   "type": "module",
   "main": "./dist/extension.cjs",
   "scripts": {
     "build": "tsdown --env.NODE_ENV production",
+    "check": "pnpm format --check && pnpm lint && pnpm typecheck",
     "commit": "cz",
     "dev": "tsdown --watch ./src --env.NODE_ENV development",
     "format": "oxfmt",
@@ -22,7 +23,10 @@
   "dependencies": {
     "@reactive-vscode/vueuse": "^1.0.2",
     "@sapphire/result": "^2.8.0",
-    "package-manager-detector": "^1.9.0"
+    "dedent": "^1.7.2",
+    "discord.js": "^14.27.0",
+    "package-manager-detector": "^1.9.0",
+    "validate-npm-package-name": "^8.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
@@ -30,6 +34,7 @@
     "@commitlint/cz-commitlint": "^21.2.4",
     "@commitlint/types": "^21.2.3",
     "@types/node": "22.x",
+    "@types/validate-npm-package-name": "^4.0.2",
     "@types/vscode": "^1.99.0",
     "commitizen": "^4.3.2",
     "husky": "^9.1.7",
@@ -40,8 +45,8 @@
     "reactive-vscode": "^1.0.2",
     "socket": "^1.10.0",
     "taze": "^21.3.0",
-    "tsdown": "^0.15.11",
-    "typescript": "^5.9.3"
+    "tsdown": "^0.23",
+    "typescript": "^6"
   },
   "contributes": {
     "commands": [
@@ -53,6 +58,11 @@
       {
         "command": "seedcord.runDev",
         "title": "Run Dev",
+        "category": "Seedcord"
+      },
+      {
+        "command": "seedcord.createProject",
+        "title": "Create Project",
         "category": "Seedcord"
       }
     ],

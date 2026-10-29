@@ -26,7 +26,7 @@ interface SeedcordLookingResultFailure {
 
 type SeedcordLookingResult = SeedcordLookingResultSuccess | SeedcordLookingResultFailure
 
-const packageJsonCache = new Map<string, PackageJson>()
+export const packageJsonCache = new Map<string, PackageJson>()
 
 async function loadJson<T extends object = object>(filePath: string): Promise<T | null> {
   const loadingResult = await Result.fromAsync(() => readFile(filePath, 'utf-8'))
@@ -66,12 +66,9 @@ async function loadPackageJsonsInWorkspace() {
 
 export async function hasSeedcord(): Promise<SeedcordLookingResult> {
   const jsons = await loadPackageJsonsInWorkspace()
-  const found = jsons.some((pkg) => hasSeedcordKey(pkg.json))
+  const found = jsons.find((pkg) => hasSeedcordKey(pkg.json))
 
-  if (found) {
-    const path = jsons.find((pkg) => hasSeedcordKey(pkg.json))?.path ?? ''
-    return { found: true, path }
-  }
+  if (found) return { found: true, path: found.path }
 
   return { found: false }
 }
