@@ -110,3 +110,40 @@ export async function getCodegenCommand() {
 
   return command
 }
+
+type CommandsManagerSubcommands = 'deploy' | 'list' | 'clean' | 'purge'
+
+export async function getCommandsManagerCommand(subcommand: CommandsManagerSubcommands) {
+  const configured = getConfiguredPackageManager()
+
+  const workspaceFolder = workspace.workspaceFolders?.[0]
+
+  if (!workspaceFolder) {
+    throw new Error('No workspace folder is open')
+  }
+
+  let pm: Agent
+
+  if (configured === 'auto') {
+    const { detect } = await import('package-manager-detector/detect')
+    const detected = await detect({
+      cwd: workspaceFolder.uri.fsPath,
+    })
+
+    if (!detected) {
+      throw new Error('Could not detect the package manager')
+    }
+
+    pm = detected.agent
+  } else {
+    pm = configured
+  }
+
+  const command = resolveCommand(pm, 'execute-local', ['commands', subcommand])
+
+  if (!command) {
+    throw new Error(`Cannot resolve a command for package manager: ${pm}`)
+  }
+
+  return command
+}
