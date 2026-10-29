@@ -1,15 +1,20 @@
 [tools]
+java = "temurin-27.0.1+0"
 node = "22"
 "npm:@antfu/ni" = "30"
+"npm:nx" = "24"
 pnpm = "12"
 
-[hooks]
-enter = "ni"
+[env]
+NX_GRADLE_PROJECT_GRAPH_TIMEOUT = "600" # In seconds
 
 [tasks.build]
 alias = "b"
-run = "nr build"
+run = "nx affected -t build"
 
 [tasks.dev]
 alias = "d"
-run = "nr dev"
+run = "nx run-many -t dev"
+
+[tasks.resync]
+run = "nx run-many -t resync"

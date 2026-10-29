@@ -1,0 +1,21 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "Visual Studio Code Extension",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"]
+  },
+  "targets": {
+    "build": {
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "continuous": true,
+      "dependsOn": ["build"]
+    },
+    "resync": {
+      "cache": true,
+      "command": "pnpm install && pnpm build"
+    }
+  }
+}

@@ -1,8 +1,12 @@
 minimumReleaseAgeExclude:
   - socket@1.10.0
+packages:
+  - 'extensions/*'
 permissions:
   taze:
     skills: true
 skills:
   dirs:
     - ./.agents/skills
+allowBuilds:
+  nx: true
