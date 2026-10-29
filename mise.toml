@@ -1,12 +1,14 @@
 [tools]
-java = "temurin-27.0.1+0"
+"github:detekt/detekt" = "1.23"
+java = "temurin-25.0.5+8.0.LTS"
+ktlint = "1.8"
 node = "22"
 "npm:@antfu/ni" = "30"
 "npm:nx" = "24"
-pnpm = "12"
+pnpm = "12.14.0"
 
 [env]
-NX_GRADLE_PROJECT_GRAPH_TIMEOUT = "600" # In seconds
+NX_GRADLE_PROJECT_GRAPH_TIMEOUT = "600"  # In seconds
 
 [tasks.build]
 alias = "b"
@@ -15,6 +17,10 @@ run = "nx affected -t build"
 [tasks.dev]
 alias = "d"
 run = "nx run-many -t dev"
+
+[tasks.lint]
+alias = "l"
+run = "nx run-many -t lint"
 
 [tasks.resync]
 run = "nx run-many -t resync"

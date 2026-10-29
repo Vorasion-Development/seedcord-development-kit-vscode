@@ -1,13 +1,32 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "JetBrains Extension",
-  "targets": {
-    "build": {
-      "cache": true,
-      "executor": "@nx/gradle:gradle"
-    },
-    "clean": {
-      "executor": "@nx/gradle:gradle"
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "JetBrains",
+    "targets": {
+        "build": {
+            "cache": true,
+            "executor": "@nx/gradle:gradle"
+        },
+        "clean": {
+            "executor": "@nx/gradle:gradle"
+        },
+        "detekt": {
+            "cache": true,
+            "executor": "@nx/gradle:gradle"
+        },
+        "ktlintCheck": {
+            "cache": true,
+            "executor": "@nx/gradle:gradle"
+        },
+        "ktlintFormat": {
+            "cache": true,
+            "executor": "@nx/gradle:gradle"
+        },
+        "lint": {
+            "cache": true,
+            "dependsOn": [
+                "detekt",
+                "ktlintCheck"
+            ]
+        }
     }
-  }
 }

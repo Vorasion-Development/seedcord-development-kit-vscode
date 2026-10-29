@@ -3,12 +3,17 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 rootProject.name = "jetbrains_development_kit"
 
 pluginManagement {
+    val detektVersion = providers.gradleProperty("DETEKT_VERSION").get()
+
     plugins {
-        id("org.jetbrains.kotlin.jvm") version "2.3.20"
+        id("dev.detekt") version detektVersion
+        id("org.jetbrains.kotlin.jvm") version "2.3.21"
         id("org.jetbrains.changelog") version "2.5.0"
     }
+
     repositories {
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 

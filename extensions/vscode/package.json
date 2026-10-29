@@ -10,8 +10,8 @@
   "type": "module",
   "main": "./dist/extension.cjs",
   "scripts": {
-    "build": "tsdown --env.NODE_ENV production",
-    "dev": "tsdown --watch ./src --env.NODE_ENV development",
+    "build": "vp pack --env.NODE_ENV production",
+    "dev": "vp pack --watch ./src --env.NODE_ENV development",
     "typecheck": "tsc --noEmit",
     "vscode:prepublish": "pnpm run build"
   },
@@ -28,8 +28,8 @@
     "@types/validate-npm-package-name": "^4.0.2",
     "@types/vscode": "^1.99.0",
     "reactive-vscode": "^1.0.2",
-    "tsdown": "^0.23",
-    "typescript": "^6"
+    "typescript": "^6",
+    "vite-plus": "catalog:"
   },
   "contributes": {
     "commands": [
