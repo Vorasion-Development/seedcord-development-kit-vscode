@@ -11,11 +11,11 @@ export default defineConfig({
     tabWidth: 2,
     useTabs: false,
     printWidth: 120,
-    ignorePatterns: ['node_modules', '.git', '.husky', '.vscode', 'dist', 'build', '.knip.jsonc', '.agents'],
+    ignorePatterns: ['node_modules', '.git', '.vscode', 'dist', 'build', '.knip.jsonc', '.agents'],
   },
   lint: {
     plugins: ['eslint', 'import', 'jsdoc', 'node', 'oxc', 'promise', 'typescript', 'unicorn'],
-    ignorePatterns: ['node_modules', '.git', '.husky', '.vscode', 'dist', 'build'],
+    ignorePatterns: ['node_modules', '.git', '.vscode', 'dist', 'build'],
     jsPlugins: [{ name: 'vite-plus', specifier: 'vite-plus/oxlint-plugin' }],
     rules: {
       'vite-plus/prefer-vite-plus-imports': 'error',
