@@ -1,0 +1,31 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "name": "VSCode",
+    "namedInputs": {
+        "default": [
+            "{projectRoot}/**/*"
+        ]
+    },
+    "targets": {
+        "build": {
+            "cache": true,
+            "dependsOn": [
+                "^build"
+            ]
+        },
+        "dev": {
+            "continuous": true,
+            "dependsOn": [
+                "build"
+            ]
+        },
+        "lint": {
+            "cache": true,
+            "command": "vp lint"
+        },
+        "resync": {
+            "cache": true,
+            "command": "pnpm install && pnpm nx run VSCode:build"
+        }
+    }
+}

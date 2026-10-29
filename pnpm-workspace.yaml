@@ -1,8 +1,16 @@
 minimumReleaseAgeExclude:
   - socket@1.10.0
-permissions:
-  taze:
-    skills: true
-skills:
-  dirs:
-    - ./.agents/skills
+packages:
+  - 'extensions/*'
+allowBuilds:
+  nx: true
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vite-plus: 1.4.0
+overrides:
+  vite@*: 'catalog:'
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: '*'

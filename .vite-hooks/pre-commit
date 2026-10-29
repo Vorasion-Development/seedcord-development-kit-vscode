@@ -1,0 +1,7 @@
+# Run our checks
+vp staged
+
+# Formatting lmao.
+echo
+echo "----------------------------------------"
+echo

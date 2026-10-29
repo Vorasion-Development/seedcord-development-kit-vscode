@@ -1,0 +1,74 @@
+{
+  "name": "seedcord-development-kit",
+  "displayName": "Seedcord Development Kit",
+  "version": "0.0.1",
+  "private": true,
+  "categories": [
+    "Other"
+  ],
+  "publisher": "seedcord",
+  "type": "module",
+  "main": "./dist/extension.cjs",
+  "scripts": {
+    "build": "vp pack --env.NODE_ENV production",
+    "dev": "vp pack --watch ./src --env.NODE_ENV development",
+    "typecheck": "tsc --noEmit",
+    "vscode:prepublish": "pnpm run build"
+  },
+  "dependencies": {
+    "@reactive-vscode/vueuse": "^1.0.2",
+    "@sapphire/result": "^2.8.0",
+    "dedent": "^1.7.2",
+    "discord.js": "^14.27.0",
+    "package-manager-detector": "^1.9.0",
+    "validate-npm-package-name": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.x",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "@types/vscode": "^1.99.0",
+    "reactive-vscode": "^1.0.2",
+    "typescript": "^6",
+    "vite-plus": "catalog:"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "seedcord.openLogger",
+        "title": "Open Logger",
+        "category": "Seedcord"
+      },
+      {
+        "command": "seedcord.runDev",
+        "title": "Run Dev",
+        "category": "Seedcord"
+      },
+      {
+        "command": "seedcord.createProject",
+        "title": "Create Project",
+        "category": "Seedcord"
+      }
+    ],
+    "configuration": {
+      "properties": {
+        "seedcord.stopBeingAnnoying": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to suppress the one-time message shown at startup when seedcord is not found in the current workspace"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "typescript",
+        "path": "./snippets/seedcord.snippets.json"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "engines": {
+    "vscode": "^1.99.0"
+  }
+}

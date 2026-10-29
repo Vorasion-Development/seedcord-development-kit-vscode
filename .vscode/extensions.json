@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "nrwl.angular-console",
+        "oxc.oxc-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "YoavBls.pretty-ts-errors",
+        "vscjava.vscode-gradle",
+        "jetbrains.kotlin-server",
+        "VoidZero.vite-plus-extension-pack"
+    ],
+    "unwantedRecommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+}

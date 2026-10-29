@@ -1,2 +1,14 @@
 dist
 node_modules
+
+.nx/cache
+.nx/workspace-data
+.nx/migrate-runs
+.nx/polygraph
+.claude/worktrees
+.claude/settings.local.json
+
+.gradle
+.idea
+.intellijPlatform
+build

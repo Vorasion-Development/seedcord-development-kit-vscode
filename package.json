@@ -1,91 +1,31 @@
 {
-  "name": "seedcord-development-kit",
-  "displayName": "Seedcord Development Kit",
-  "version": "0.0.1",
+  "name": "@seedcord/ide-extensions",
+  "version": "1.0.0",
   "private": true,
-  "categories": [
-    "Other"
-  ],
-  "publisher": "vorasion-development",
   "type": "module",
-  "main": "./dist/extension.cjs",
+  "packageManager": "pnpm@12.14.0",
   "scripts": {
-    "build": "tsdown --env.NODE_ENV production",
-    "check": "pnpm format --check && pnpm lint && pnpm typecheck",
     "commit": "cz",
-    "dev": "tsdown --watch ./src --env.NODE_ENV development",
-    "format": "oxfmt",
-    "lint": "oxlint --type-aware",
-    "prepare": "husky",
-    "typecheck": "tsc --noEmit",
-    "vscode:prepublish": "pnpm run build"
-  },
-  "dependencies": {
-    "@reactive-vscode/vueuse": "^1.0.2",
-    "@sapphire/result": "^2.8.0",
-    "dedent": "^1.7.2",
-    "discord.js": "^14.27.0",
-    "package-manager-detector": "^1.9.0",
-    "validate-npm-package-name": "^8.0.0"
+    "format": "vp fmt",
+    "lint": "vp lint --type-aware",
+    "prepare": "vp config",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/cz-commitlint": "^21.2.4",
     "@commitlint/types": "^21.2.3",
-    "@types/node": "22.x",
-    "@types/validate-npm-package-name": "^4.0.2",
-    "@types/vscode": "^1.99.0",
+    "@nx/gradle": "24.0.2",
+    "@nx/js": "24.0.2",
+    "@swc/helpers": "~0.5.18",
     "commitizen": "^4.3.2",
     "husky": "^9.1.7",
     "inquirer": "9",
-    "oxfmt": "^0.74.0",
-    "oxlint": "^1.89.0",
-    "oxlint-tsgolint": "^7.0.2004",
-    "reactive-vscode": "^1.0.2",
+    "nx": "24.0.2",
     "socket": "^1.10.0",
     "taze": "^21.3.0",
-    "tsdown": "^0.23",
-    "typescript": "^6"
-  },
-  "contributes": {
-    "commands": [
-      {
-        "command": "seedcord.openLogger",
-        "title": "Open Logger",
-        "category": "Seedcord"
-      },
-      {
-        "command": "seedcord.runDev",
-        "title": "Run Dev",
-        "category": "Seedcord"
-      },
-      {
-        "command": "seedcord.createProject",
-        "title": "Create Project",
-        "category": "Seedcord"
-      }
-    ],
-    "configuration": {
-      "properties": {
-        "seedcord.stopBeingAnnoying": {
-          "type": "boolean",
-          "default": false,
-          "description": "Whether to suppress the one-time message shown at startup when seedcord is not found in the current workspace"
-        }
-      }
-    },
-    "snippets": [
-      {
-        "language": "typescript",
-        "path": "./snippets/seedcord.snippets.json"
-      }
-    ]
-  },
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "engines": {
-    "vscode": "^1.99.0"
+    "typescript": "^6",
+    "vite-plus": "catalog:"
   }
 }
