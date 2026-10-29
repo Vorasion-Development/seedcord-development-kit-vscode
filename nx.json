@@ -34,5 +34,6 @@
     "autoExit": 10,
     "enabled": true
   },
-  "useDaemonProcess": true
+  "useDaemonProcess": true,
+  "nxCloudId": "6ae3b37594bd1787329bd2ed"
 }
